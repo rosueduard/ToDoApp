@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { ToDoListComponent} from './todolist/todolist.component';
 import { ToDoListService} from './services/todolist.service';
 import { HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { HttpClientModule} from '@angular/common/http';
   imports: [
     BrowserModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [ ToDoListService],
   bootstrap: [ AppComponent]

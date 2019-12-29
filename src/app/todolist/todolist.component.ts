@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {ToDoListService} from '../services/todolist.service';
+import {ToDoList} from '../services/todolist';
 
 @Component({
   selector: 'to-do-list',
@@ -8,17 +9,24 @@ import {ToDoListService} from '../services/todolist.service';
 })
 export class ToDoListComponent implements OnInit {
 
-  public personalDetails = [];
+  public itemsList: ToDoList[] = [];
+  public newItem: ToDoList;
 
   constructor(
     private todolistService: ToDoListService
   ) {}
 
   ngOnInit() {
-    this.todolistService.getData().subscribe((data) => {
-      this.personalDetails = Array.from(Object.keys(data), k => data[k]);
-      console.log(this.personalDetails);
-    });
+    console.log(ElementRef);
+  }
+
+  addItemToList() {
+    const item: ToDoList = {
+      name: this.newItem,
+      description: 'Test',
+      done: false
+    };
+    this.itemsList.push(item);
   }
 
 }
