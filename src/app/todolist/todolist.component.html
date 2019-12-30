@@ -9,21 +9,26 @@
 
       <div class="form-group">
         <label class="col-sm-2 control-label" for="fullName"> New Item</label>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
           <input id="fullName" [(ngModel)]="newItem"  type="text" class="form-control" (keydown.enter)="addItemToList()">
         </div>
-        <button class="btn btn-primary" type="button" (click)="addItemToList()" >Add</button>
+
+        <div class="btn-toolbar">
+          <button class="btn btn-success" type="button" (click)="addItemToList()" >Add</button>
+          <button class="btn btn-primary" type="button" (click)="updateList()" >Update List</button>
+          <button class="btn btn-danger" type="button" (click)="clearList()" >Clear List</button>
+        </div>
       </div>
 
       <div class="form-group ">
-        <div *ngIf="itemsList"  class="center-block">
+        <div *ngIf="itemsList"  class="center-block ">
           <div *ngFor="let item of itemsList; let i = index" class="divlayout">
             {{item.name}}
           </div>
         </div>
       </div>
-
     </div>
+
   </div>
 
 </div>

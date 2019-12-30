@@ -7,7 +7,8 @@ import {ToDoList} from './todolist';
 })
 export class ToDoListService {
 
-  private apiUrl = 'http://jsonplaceholder.typicode.com/users';
+  private apiUrl = 'https://jsonplaceholder.typicode.com/posts/2';
+  private postUrl = 'https://jsonplaceholder.typicode.com/posts';
   public itemsList: ToDoList[] = [];
 
 
@@ -19,7 +20,11 @@ export class ToDoListService {
     return this.http.get(this.apiUrl);
   }
 
-  getListItem() {
+  setData(data) {
+    return this.http.post(this.postUrl, data);
+  }
+
+  getListItem(): ToDoList[] {
     return this.itemsList;
   }
 
