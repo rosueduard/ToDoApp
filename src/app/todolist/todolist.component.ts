@@ -1,7 +1,7 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
-import {ToDoListService} from '../services/todolist.service';
-import {ToDoList} from '../services/todolist';
-import {HttpClient} from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ToDoListService } from '../services/todolist.service';
+import { ToDoList } from '../services/todolist';
+import { HttpClient } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -17,7 +17,7 @@ export class ToDoListComponent implements OnInit {
   constructor(
     private todolistService: ToDoListService,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.http.get('assets/list.json').subscribe((list: ToDoList) => {
@@ -25,6 +25,7 @@ export class ToDoListComponent implements OnInit {
       this.itemsList = list;
       console.log(list);
     });
+
   }
 
   addItemToList() {
@@ -32,14 +33,15 @@ export class ToDoListComponent implements OnInit {
       name: this.newItem,
       done: false
     });
+    this.newItem = null;
   }
 
   clearList() {
     this.itemsList = [];
-    this.updateList();
+    this.saveList();
   }
 
-  updateList() {
+  saveList() {
     const blob = new Blob( [JSON.stringify(this.itemsList)], {type: 'application/octet-stream'} );
     saveAs( blob, 'list.json');
   }
