@@ -19,10 +19,12 @@ export class ToDoListComponent implements OnInit {
     private http: HttpClient
   ) { }
 
+
   ngOnInit() {
-    this.http.get('assets/list.json').subscribe((list: ToDoList) => {
+    const url = 'http://localhost:3000/api/todos';
+    this.http.get(url).subscribe((list: ToDoList) => {
       // @ts-ignore
-      this.itemsList = list;
+      this.itemsList = list.todos;
       console.log(list);
     });
 
