@@ -24,18 +24,25 @@ export class ToDoListComponent implements OnInit {
     const url = 'http://localhost:3000/api/todos';
     this.http.get(url).subscribe((list: ToDoList) => {
       // @ts-ignore
-      this.itemsList = list.todos;
+      this.itemsList = list.data;
       console.log(list);
     });
 
   }
 
   addItemToList() {
+    const url = 'http://localhost:3000/api/add';
     this.itemsList.push({
       name: this.newItem,
       done: false
     });
-    this.newItem = null;
+
+
+    this.http.post(url, this.newItem).subscribe((data) => {
+      console.log(data);
+      this.newItem = null;
+
+    });
   }
 
   clearList() {
