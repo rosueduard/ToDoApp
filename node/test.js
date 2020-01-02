@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var express = require("express");
+var config = require("../config");
 var app = express();
 var http = require('http');
 var port = 3000;
@@ -20,7 +21,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/test', function (err, db) {
 
 // get all todos
 app.get('/api/todos', (req, res) => {
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+  res.set(config.headers);
   res.status(200).send({
     success: 'true',
     message: 'todos retrieved successfully',
