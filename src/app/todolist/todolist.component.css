@@ -1,10 +1,15 @@
 .divlayout{
+  background-color: #F64223;
   width: 400px;
-  background-color: #ccc;
   margin: 5px auto;
   padding: 10px 10px;
-  border: 3px solid #73AD21;
+  border: 2px solid #333;
   overflow: auto;
+}
+
+.divlayout.checked {
+  background-color: #5CB85C;
+  text-decoration: line-through;
 }
 
 .remove-item {
@@ -31,4 +36,9 @@ input[type=checkbox]
   font-size: 110%;
   display: inline;
   margin-left: 10px;
+}
+
+.checked .label-text {
+  text-decoration: line-through;
+  color: gray;
 }

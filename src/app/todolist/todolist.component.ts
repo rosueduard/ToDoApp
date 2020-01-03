@@ -31,14 +31,15 @@ export class ToDoListComponent implements OnInit {
 
   addItemToList() {
     const url = 'http://localhost:3000/api/add';
-    // multipart/form-data
-    this.http.post(url, {name : this.newItem, done: false}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
-      .subscribe((data) => {
-        // @ts-ignore
-        this.itemsList.push(data.data);
-        console.log(data);
-        this.newItem = null;
-    });
+    if (this.newItem !== undefined) {
+      this.http.post(url, {name : this.newItem, done: false}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
+        .subscribe((data) => {
+          // @ts-ignore
+          this.itemsList.push(data.data);
+          console.log(data);
+          this.newItem = null;
+        });
+    }
   }
 
   clearList() {
@@ -48,12 +49,18 @@ export class ToDoListComponent implements OnInit {
     });
   }
 
-  remove(item, index) {
+  removeItemToList(item, index) {
     const url = 'http://localhost:3000/api/delete';
     this.http.delete(`${url}/${item._id}`).subscribe(data => {
       // remove element from displayed list
       this.itemsList.splice(index, 1);
     });
+  }
+
+  updateItem(item, index, e) {
+    if (e.target.type !== 'button') {
+      this.itemsList[index].done = !this.itemsList[index].done;
+    }
   }
 
 }

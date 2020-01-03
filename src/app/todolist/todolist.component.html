@@ -21,13 +21,13 @@
 
       <div class="form-group ">
         <div *ngIf="itemsList"  class="center-block ">
-          <div *ngFor="let item of itemsList; let i = index" class="divlayout">
+          <div *ngFor="let item of itemsList; let i = index" [ngClass]="{checked: item.done}" class="divlayout" (click)="updateItem(item, i, $event)">
             <div class="checkbox-label">
-              <input type="checkbox">
+              <input [(ngModel)]="item.done" type="checkbox">
               <label class="label-text">{{item.name}}</label>
             </div>
-            <div class="remove-item">
-              <button class="btn btn-danger" type="button" (click)="remove(item, i)">X</button>
+            <div class="remove-item" *ngIf="!item.done">
+              <button class="btn btn-danger" type="button" (click)="removeItemToList(item, i)">X</button>
             </div>
           </div>
         </div>
