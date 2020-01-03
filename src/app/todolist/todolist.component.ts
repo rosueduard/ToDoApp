@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDoListService } from '../services/todolist.service';
 import { ToDoList } from '../services/todolist';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -25,7 +25,7 @@ export class ToDoListComponent implements OnInit {
     this.http.get(url).subscribe((list: ToDoList) => {
       // @ts-ignore
       this.itemsList = list.data;
-      console.log(list);
+      // console.log(list);
     });
 
   }
@@ -37,11 +37,11 @@ export class ToDoListComponent implements OnInit {
       done: false
     });
 
-
-    this.http.post(url, this.newItem).subscribe((data) => {
-      console.log(data);
-      this.newItem = null;
-
+    // multipart/form-data
+    this.http.post(url, {item : {name : this.newItem, done: false}}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
+      .subscribe((data) => {
+        console.log(data);
+        this.newItem = null;
     });
   }
 
