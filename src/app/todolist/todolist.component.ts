@@ -38,7 +38,7 @@ export class ToDoListComponent implements OnInit {
     });
 
     // multipart/form-data
-    this.http.post(url, {item : {name : this.newItem, done: false}}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
+    this.http.post(url, {name : this.newItem, done: false}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
       .subscribe((data) => {
         console.log(data);
         this.newItem = null;
