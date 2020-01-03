@@ -10,12 +10,11 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" for="fullName"> New Item</label>
         <div class="col-sm-6">
-          <input id="fullName" [(ngModel)]="newItem"  type="text" class="form-control" (keydown.enter)="addItemToList()">
+          <input id="fullName" [(ngModel)]="newItem" autocomplete="off" type="text" class="form-control" (keydown.enter)="addItemToList()">
         </div>
 
         <div class="btn-toolbar">
           <button class="btn btn-success" type="button" (click)="addItemToList()" >Add</button>
-          <button class="btn btn-primary" type="button" (click)="saveList()" >Save List</button>
           <button class="btn btn-danger" type="button" (click)="clearList()" >Clear List</button>
         </div>
       </div>
@@ -23,7 +22,13 @@
       <div class="form-group ">
         <div *ngIf="itemsList"  class="center-block ">
           <div *ngFor="let item of itemsList; let i = index" class="divlayout">
-            {{item.name}}
+            <div class="checkbox-label">
+              <input type="checkbox">
+              <label class="label-text">{{item.name}}</label>
+            </div>
+            <div class="remove-item">
+              <button class="btn btn-danger" type="button" (click)="remove(item, i)">X</button>
+            </div>
           </div>
         </div>
       </div>

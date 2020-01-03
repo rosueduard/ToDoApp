@@ -1,7 +1,34 @@
 .divlayout{
-  width: 40%;
+  width: 400px;
   background-color: #ccc;
-  margin-bottom: 5px;
+  margin: 5px auto;
   padding: 10px 10px;
   border: 3px solid #73AD21;
+  overflow: auto;
+}
+
+.remove-item {
+  float: right;
+}
+.checkbox-label {
+  float: left;
+}
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  margin: 10px 0  0 10px;
+  vertical-align: text-bottom;
+}
+
+/* Might want to wrap a span around your checkbox text */
+.label-text {
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+  margin-left: 10px;
 }

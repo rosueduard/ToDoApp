@@ -25,34 +25,35 @@ export class ToDoListComponent implements OnInit {
     this.http.get(url).subscribe((list: ToDoList) => {
       // @ts-ignore
       this.itemsList = list.data;
-      // console.log(list);
     });
 
   }
 
   addItemToList() {
     const url = 'http://localhost:3000/api/add';
-    this.itemsList.push({
-      name: this.newItem,
-      done: false
-    });
-
     // multipart/form-data
     this.http.post(url, {name : this.newItem, done: false}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
       .subscribe((data) => {
+        // @ts-ignore
+        this.itemsList.push(data.data);
         console.log(data);
         this.newItem = null;
     });
   }
 
   clearList() {
-    this.itemsList = [];
-    this.saveList();
+    const url = 'http://localhost:3000/api/deleteAll';
+    this.http.delete(url).subscribe(data => {
+      this.itemsList = [];
+    });
   }
 
-  saveList() {
-    const blob = new Blob( [JSON.stringify(this.itemsList)], {type: 'application/octet-stream'} );
-    saveAs( blob, 'list.json');
+  remove(item, index) {
+    const url = 'http://localhost:3000/api/delete';
+    this.http.delete(`${url}/${item._id}`).subscribe(data => {
+      // remove element from displayed list
+      this.itemsList.splice(index, 1);
+    });
   }
 
 }
