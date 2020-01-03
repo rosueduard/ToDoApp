@@ -27,7 +27,7 @@
               <label class="label-text">{{item.name}}</label>
             </div>
             <div class="remove-item" *ngIf="!item.done">
-              <button class="btn btn-danger" type="button" (click)="removeItemToList(item, i)">X</button>
+              <span class="glyphicon glyphicon-trash" (click)="removeItemToList(item, i)"></span>
             </div>
           </div>
         </div>

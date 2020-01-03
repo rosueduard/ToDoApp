@@ -15,6 +15,15 @@
 .remove-item {
   float: right;
 }
+
+.remove-item .glyphicon {
+  top: 4px;
+}
+
+.remove-item:hover {
+  color: gray;
+}
+
 .checkbox-label {
   float: left;
 }
@@ -26,7 +35,7 @@ input[type=checkbox]
   -webkit-transform: scale(2); /* Safari and Chrome */
   -o-transform: scale(2); /* Opera */
   transform: scale(2);
-  margin: 10px 0  0 10px;
+  margin-left: 10px;
   vertical-align: text-bottom;
 }
 
