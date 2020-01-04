@@ -7,6 +7,7 @@ var app = express();
 
 var bodyParser = require('body-parser');
 var cors = require('cors');
+
 // config app
 app.use(
   bodyParser.json(),
@@ -18,9 +19,15 @@ app.use(
   })
 );
 
+// create server
+var port = 3000;
+var server = http.createServer(app);
+server.listen(port, () => {
+  console.log('serve is start ' + port);
+});
+
 // get all todos
 app.get('/api/todos', (req, res) => {
-
   MongoClient.connect(config.dbUrl, function (err, db) {
     if (err) throw err;
     var coll = db.collection('list');
@@ -74,8 +81,6 @@ app.delete('/api/deleteAll', (req, res) => {
 
 app.delete('/api/delete/:id', (req, res) => {
 
-  // res.set(config.headers);
-
   MongoClient.connect(config.dbUrl, function(err, db) {
     if (err) throw err;
     console.log(req.params.id);
@@ -96,8 +101,30 @@ app.delete('/api/delete/:id', (req, res) => {
   });
 });
 
-var port = 3000;
-var server = http.createServer(app);
-server.listen(port, () => {
-  console.log('serve is start ' + port);
+app.post('/api/update', (req, res) => {
+
+  MongoClient.connect(config.dbUrl, function(err, db) {
+    if (err) throw err;
+    var newItem = req.body.item;
+    db.collection("list").updateOne({ "_id" : ObjectId(newItem._id) }, { $set: { "done" : !newItem.done } },  function(error, result) {
+      if (err) throw err;
+      if (result.modifiedCount > 0 ) {
+        newItem.done = !newItem.done;
+        res.set(config.headers);
+        res.status(200).send({
+          success: 'true',
+          message: 'Item updated successfully',
+          updated: result.modifiedCount,
+          item: newItem
+        })
+      } else {
+        res.status(400).send({
+          success: false,
+          message: 'An error occurred!!'
+        })
+      }
+      db.close();
+    });
+  });
 });
+

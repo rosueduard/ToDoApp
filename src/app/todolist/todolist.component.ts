@@ -36,7 +36,6 @@ export class ToDoListComponent implements OnInit {
         .subscribe((data) => {
           // @ts-ignore
           this.itemsList.push(data.data);
-          console.log(data);
           this.newItem = null;
         });
     }
@@ -51,15 +50,23 @@ export class ToDoListComponent implements OnInit {
 
   removeItemToList(item, index) {
     const url = 'http://localhost:3000/api/delete';
-    this.http.delete(`${url}/${item._id}`).subscribe(data => {
+    this.http.delete(`${url}/${item._id}`).subscribe(() => {
       // remove element from displayed list
       this.itemsList.splice(index, 1);
     });
   }
 
   updateItem(item, index, e) {
-    if (e.target.type !== 'button') {
-      this.itemsList[index].done = !this.itemsList[index].done;
+    if (e.target.tagName !== 'SPAN') {
+      const url = 'http://localhost:3000/api/update';
+      this.http.post(url, {item})
+        .subscribe((data) => {
+          // @ts-ignore
+          if (data.updated) {
+            // @ts-ignore
+            this.itemsList[index] = data.item;
+          }
+        });
     }
   }
 
