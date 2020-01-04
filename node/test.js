@@ -8,6 +8,17 @@ var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
+// create DB connection
+var _db;
+var _listCollection;
+MongoClient.connect(config.dbUrl, function (err, database) {
+  if (err) throw err;
+  else {
+    _db = database;
+    _listCollection = _db.collection('list');
+  }
+});
+
 // config app
 app.use(
   bodyParser.json(),
@@ -28,87 +39,64 @@ server.listen(port, () => {
 
 // get all todos
 app.get('/api/todos', (req, res) => {
-  MongoClient.connect(config.dbUrl, function (err, db) {
-    if (err) throw err;
-    var coll = db.collection('list');
-    coll.find({}).toArray(function (err, result) {
 
-      res.set(config.headers);
-      res.status(200).send({
-        success: 'true',
-        message: 'todos retrieved successfully',
-        data: result
-      });
+  _listCollection.find({}).toArray(function (err, result) {
+    res.set(config.headers);
+    res.status(200).send({
+      success: 'true',
+      message: 'todos retrieved successfully',
+      data: result
     });
-    db.close();
   });
 });
 
 app.post('/api/add', (req, res) => {
-  // create connection and insert new item
-  MongoClient.connect(config.dbUrl, function(err, db) {
-    if (err) throw err;
-    var newItem = req.body;
-    db.collection("list").insertOne(newItem, function(err, res) {
-      if (err) throw err;
-      console.log("1 document inserted ", req.body);
-      db.close();
-    });
+  var newItem = req.body;
 
-    res.set(config.headers);
-    res.status(200).send({
-      success: 'true',
-      message: 'Item retrieved successfully',
-      data: req.body
-    })
+  _listCollection.insertOne(newItem, function (err, res) {
+    if (err) throw err;
+    console.log("1 document inserted ", req.body);
   });
+
+  res.set(config.headers);
+  res.status(200).send({
+    success: 'true',
+    message: 'Item retrieved successfully',
+    data: req.body
+  })
 });
 
 app.delete('/api/deleteAll', (req, res) => {
 
-  MongoClient.connect(config.dbUrl, function(err, db) {
-    if (err) throw err;
-    db.collection("list").deleteMany({});
-    db.close();
-    // res.set(config.headers);
-    res.status(200).send({
-      success: 'true',
-      message: 'Item retrieved successfully',
-      data: req.body
-    })
-  });
+  _listCollection.deleteMany({});
+  res.status(200).send({
+    success: 'true',
+    message: 'Item retrieved successfully',
+    data: req.body
+  })
 });
 
 app.delete('/api/delete/:id', (req, res) => {
 
-  MongoClient.connect(config.dbUrl, function(err, db) {
-    if (err) throw err;
-    console.log(req.params.id);
-
-    db.collection("list").deleteOne({ "_id" : ObjectId(req.params.id)}, (error, result) => {
-      console.log(result.deletedCount);
-      db.close();
-      if (result.deletedCount > 0 ) {
-        res.status(200).send({
-          success: 'true',
-          message: 'Item deleted successfully',
-          deleted: result.deletedCount
-        })
-      } else {
-        res.status(404).send();
-      }
-    });
+  _listCollection.deleteOne({"_id": ObjectId(req.params.id)}, (error, result) => {
+    if (result.deletedCount > 0) {
+      res.status(200).send({
+        success: 'true',
+        message: 'Item deleted successfully',
+        deleted: result.deletedCount
+      })
+    } else {
+      res.status(404).send();
+    }
   });
 });
 
 app.post('/api/update', (req, res) => {
-
-  MongoClient.connect(config.dbUrl, function(err, db) {
-    if (err) throw err;
     var newItem = req.body.item;
-    db.collection("list").updateOne({ "_id" : ObjectId(newItem._id) }, { $set: { "done" : !newItem.done } },  function(error, result) {
-      if (err) throw err;
-      if (result.modifiedCount > 0 ) {
+
+    _listCollection.updateOne({"_id": ObjectId(newItem._id)}, {$set: {"done": !newItem.done}}, function (error, result) {
+      if (error) throw error;
+      if (result.modifiedCount > 0) {
         newItem.done = !newItem.done;
         res.set(config.headers);
         res.status(200).send({
@@ -123,8 +111,6 @@ app.post('/api/update', (req, res) => {
           message: 'An error occurred!!'
         })
       }
-      db.close();
     });
-  });
 });
 
