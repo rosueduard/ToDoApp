@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ToDoListService } from '../services/todolist.service';
 import { ToDoList } from '../services/todolist';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { saveAs } from 'file-saver';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { CONST } from 'src/app/shared/constants';
 
 @Component({
   selector: 'to-do-list',
@@ -21,19 +21,17 @@ export class ToDoListComponent implements OnInit {
 
 
   ngOnInit() {
-    const url = 'http://localhost:3000/api/todos';
-    this.http.get(url).subscribe((list: ToDoList) => {
+    this.http.get(CONST.URL.GET_LIST).subscribe((list: ToDoList) => {
       // @ts-ignore
       this.itemsList = list.data;
     });
-
   }
 
   addItemToList() {
-    const url = 'http://localhost:3000/api/add';
     if (this.newItem !== undefined) {
-      this.http.post(url, {name : this.newItem, done: false}, { headers: new HttpHeaders().set('Content-Type', 'application/json')})
-        .subscribe((data) => {
+      this.http.post(CONST.URL.ADD_ITEM, {name : this.newItem, done: false}, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      }).subscribe((data) => {
           // @ts-ignore
           this.itemsList.push(data.data);
           this.newItem = null;
@@ -42,15 +40,13 @@ export class ToDoListComponent implements OnInit {
   }
 
   clearList() {
-    const url = 'http://localhost:3000/api/deleteAll';
-    this.http.delete(url).subscribe(data => {
+    this.http.delete(CONST.URL.DELETE_ALL).subscribe(data => {
       this.itemsList = [];
     });
   }
 
   removeItemToList(item, index) {
-    const url = 'http://localhost:3000/api/delete';
-    this.http.delete(`${url}/${item._id}`).subscribe(() => {
+    this.http.delete(`${CONST.URL.DELETE}/${item._id}`).subscribe(() => {
       // remove element from displayed list
       this.itemsList.splice(index, 1);
     });
@@ -58,8 +54,7 @@ export class ToDoListComponent implements OnInit {
 
   updateItem(item, index, e) {
     if (e.target.tagName !== 'SPAN') {
-      const url = 'http://localhost:3000/api/update';
-      this.http.post(url, {item})
+      this.http.post(CONST.URL.UPDATE, {item})
         .subscribe((data) => {
           // @ts-ignore
           if (data.updated) {
