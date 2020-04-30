@@ -26,7 +26,7 @@
     "cors": "^2.8.5",
     "file-saver": "^2.0.2",
     "file-system": "^2.2.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "mongodb": "^2.2.33",
     "rxjs": "~6.3.3",
     "save": "^2.4.0",
